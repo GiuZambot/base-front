@@ -1,62 +1,29 @@
-import CustomCircularProgress from '../../CustomCircularProgress';
 import UserAddDialog from '../UserAddDialog';
+import { ColumnType } from 'antd/lib/table';
 import { Container } from './styles';
 import { getAllUsers } from '../../../services/user.service';
-import { handleSearch } from '../../methods';
-import { Input, notification, Table, TablePaginationConfig } from 'antd';
+import { notification, Table } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
-import { ColumnType } from 'antd/lib/table';
+import { SearchOutlined } from '@ant-design/icons';
+import { ColumnFilterItem } from 'antd/lib/table/interface';
+
+export const objectMapSet = <T extends object, U extends keyof T>(arrayOfObjects: T[], field: U): T[] => {
+  const map = new Map();
+  arrayOfObjects.forEach((x) => map.set(`${x[field]}`, x));
+  const set: T[] = [];
+  map.forEach((x) => set.push(x));
+  return set;
+}
 
 const UserConfiguration = () => {
-  const [users, setUsers] = useState<User[]>([
-    {
-      id: '1',
-      name: 'test',
-      email: 'test',
-      birthDate: '10/12/1979',
-      cel: 'test',
-      address: 'test'
-    },
-    {
-      id: '2',
-      name: 'test2',
-      email: 'test2',
-      birthDate: '10/12/1979',
-      cel: 'test2',
-      address: 'test2'
-    },
-    {
-      id: '3',
-      name: 'test3',
-      email: 'test3',
-      birthDate: '10/12/1979',
-      cel: 'test3',
-      address: 'test3'
-    },
-  ]);
-  const [pagination, setPagination] = useState({ page: 1, maxItensPage: 10 });
-  const [pages, setPages] = useState({ maxPage: 0, totalSize: 0, itensSize: 0 });
-  const [search, setSearch] = useState<string>();
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
 
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
-      const { data } = await getAllUsers(
-        {
-          page: pagination.page,
-          MaxItensPage: pagination.maxItensPage,
-          search
-        }
-      );
-      setUsers(data.resultList);
-      setPages(
-        {
-          maxPage: +Math.ceil((data.totalSize / pagination.maxItensPage)).toFixed(0),
-          totalSize: data.totalSize,
-          itensSize: data.totalList
-        }
-      );
+      const data = await getAllUsers();
+      setUsers(data);
     } catch (error) {
       notification.error(
         { message: 'Não foi possível carregar a lista de usuários...' }
@@ -64,65 +31,94 @@ const UserConfiguration = () => {
     } finally {
       setLoading(false);
     }
-  }, [pagination, search]);
+  }, []);
 
   useEffect(() => {
-    //fetchUsers();
+    fetchUsers();
   }, [fetchUsers]);
 
-  const handlePagination = ({ current = 1, pageSize = 10 }: TablePaginationConfig) => {
-    setPagination({ page: current, maxItensPage: pageSize });
-  }
+  const names: User[] = objectMapSet<User, keyof User>(users, "name");
+  const namesFilter: ColumnFilterItem[] = names.map((x: User) => ({ text: x.name, value: x.name }));
+
+  const emailFilter: ColumnFilterItem[] = names.map((x: User) => ({ text: x.email, value: x.email }));
+
+  const cat: User[] = objectMapSet<User, keyof User>(users, "category");
+  const catFilter: ColumnFilterItem[] = cat.map((x: User) => ({ text: x.category, value: x.category }));
 
   const columns: ColumnType<User>[] = [
     {
       title: 'Nome',
       key: 'name',
-      dataIndex: 'name'
+      dataIndex: 'name',
+      sorter: (a: User, b: User) => a.name > b.name ? -1 : 1,
+      filterSearch: true,
+      filters: namesFilter,
+      onFilter: (value: string | number | boolean, record: User) => record.name === value,
+      filterIcon: () => <SearchOutlined />,
     },
     {
       title: 'E-mail',
-      key: 'name',
-      dataIndex: 'name',
+      key: 'email',
+      dataIndex: 'email',
+      filterSearch: true,
+      filters: emailFilter,
+      onFilter: (value: string | number | boolean, record: User) => record.email === value,
+      filterIcon: () => <SearchOutlined />,
     },
     {
       title: 'Telefone',
-      key: 'cel',
-      dataIndex: 'cel',
-    }, {
+      key: 'tel',
+      dataIndex: 'tel',
+    },
+    {
       title: 'Nascimento',
-      key: 'birthDate',
-      dataIndex: 'birthDate',
-    }, {
+      key: 'bornin',
+      dataIndex: 'bornin',
+    },
+    {
       title: 'Endereço',
       key: 'address',
       dataIndex: 'address',
-    }
+    },
+    {
+      title: 'Categoria',
+      key: 'category',
+      dataIndex: 'category',
+      filterSearch: true,
+      filters: catFilter,
+      onFilter: (value: string | number | boolean, record: User) => record.category === value,
+      filterIcon: () => <SearchOutlined />,
+    },
+    {
+      title: 'Observação',
+      key: 'coment',
+      dataIndex: 'coment',
+    },
+    {
+      title: 'Editar',
+      key: 'edit',
+      render: (valor: any, user: User) =>
+        <UserAddDialog
+          user={user}
+          fetchUsers={fetchUsers}
+        />
+    },
+
   ];
 
   return (
     <Container>
-      <CustomCircularProgress show={loading} />
       <div className='user-search-container'>
-        <div className='user-search-input'>
-          <Input
-            onChange={(event) => handleSearch({ event, setSearch, setPagination })}
-            className='search-user'
-            placeholder='Pesquisar ..'
-          />
-        </div>
         <UserAddDialog fetchUsers={fetchUsers} />
       </div>
       <Table
+        loading={loading}
         dataSource={users}
         columns={columns}
         rowKey="id"
         pagination={{
-          position: ["bottomCenter"],
-          current: pagination.page,
-          total: pages.totalSize,
+          position: ["bottomCenter"]
         }}
-        onChange={handlePagination}
         scroll={{ x: "max-content" }}
       />
     </Container >

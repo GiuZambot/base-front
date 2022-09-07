@@ -9,12 +9,12 @@ export const Container = styled.div`
   }
 
   .user-search-container {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px 0 10px 0;
     display: flex !important;
     flex-direction: row;
     flex: 1;
     align-items: center;
+    justify-content: end;
   }
 
   .header {

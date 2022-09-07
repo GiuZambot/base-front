@@ -39,17 +39,6 @@ export class ApiService {
   public async Put(url: string, model: any) {
     return this.AuthenticatedApi.put(url, model);
   }
-
-  public async Delete(url: string) {
-    return this.AuthenticatedApi.delete(url);
-  }
-
-  public async Patch(url: string, params?: any) {
-    const response = await this.AuthenticatedApi.patch(url, {
-      params,
-    });
-    return response.data;
-  }
 }
 
-export let Api = new ApiService('x', 'x');
+export let Api = new ApiService('https://projectbase.vercel.app', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjYyNTc4NzI4LCJleHAiOjE2NjI2MDc1Mjh9.t1n659fvUfdA_KmOr-Hg9vUFC1f8JWjA_plcGXFK4QY');
