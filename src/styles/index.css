@@ -1,0 +1,63 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,regular,italic,500,500italic,700,700italic,900,900italic);
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.header-container {
+  display: flex;
+  padding: 10px 8px;
+  justify-content: space-between;
+  font-weight: bold;
+  color: #272727;
+  border-radius: 0 !important;
+  background-color: #e0e3e7 !important;
+}
+
+#root {
+  height: 100vh;
+}
+
+.ant-notification {
+  z-index: 2000 !important;
+}
+
+.ant-menu-title-content {
+  margin-left: 15px;
+}
+
+th {
+  color: #1B262C !important;
+  font-weight: 700 !important;
+  padding: 10px !important;
+}
+
+.ant-pagination-item-active {
+  background-color: #75797E !important;
+  border: none;
+}
+
+.ant-pagination-item-active a {
+  color: white !important;
+}
+
+.primary-button,
+.ant-btn-primary {
+  color: white !important;
+  background-color: #B11F24 !important;
+}
+
+.MuiButtonBase-root {
+  font-size: 0.7rem !important;
+}
