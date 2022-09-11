@@ -16,3 +16,6 @@ export const updateUser = async (UserForm: User) => {
   return (Api).Put('/usuario', UserForm);
 }
 
+export const login = async (loginForm: LoginForm) => {
+  return (Api).Post('/login', loginForm);
+}

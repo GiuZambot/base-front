@@ -10,3 +10,8 @@ interface User {
   created_at?: string;
   senha?: string | null;
 }
+
+interface LoginForm {
+  email: string;
+  senha: string;
+}

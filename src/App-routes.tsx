@@ -1,4 +1,5 @@
 import ErrorBoundary from './components/ErrorBoundary';
+import Login from './pages/Login';
 import MainHeader from './components/MainHeader';
 import MainMenu from './components/MainMenu';
 import UsersPage from './pages/Users';
@@ -33,8 +34,9 @@ const AppRoutes = () => {
           <Layout>
             <ContentLayout>
               <Routes>
+                <Route path='/' element={<Login />} />
                 <Route path='users' element={<UsersPage />} />
-                <Route path='*' element={<Navigate to='users' />} />
+                <Route path='*' element={<Navigate to='/' />} />
               </Routes>
             </ContentLayout>
             <Footer style={{ textAlign: "center" }}>Base - @Bex</Footer>
