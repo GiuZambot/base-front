@@ -42,5 +42,4 @@ export class ApiService {
 }
 
 const token = localStorage.getItem('token') || 'initial-token';
-export let Api = new ApiService('http://localhost:5000', token);
-//https://projectbase.vercel.app'
+export let Api = new ApiService('https://projectbase.vercel.app', token);
