@@ -1,16 +1,18 @@
 import { Button, Form, Input, notification } from "antd";
 import { Container } from './styles';
 import { login } from '../../services/user.service';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   localStorage.clear();
 
   const handleLogin = async (loginForm: LoginForm) => {
     try {
       const { data } = await login(loginForm);
       localStorage.setItem("token", data);
-      window.location.replace('https://basebex.vercel.app/users');
+      navigate('/users');
     } catch (error) {
       notification.error({ message: 'Erro ao realizar o login, verifique os dados e tente novamente' });
     }
